@@ -377,8 +377,12 @@ add_filter( 'json_authentication_errors', 'json_cookie_check_errors', 100 );
 function json_cookie_collect_status() {
 	global $wp_json_auth_cookie;
 
-	$status_type = current_action();
-
+	if ( function_exists( 'current_action' ) ) {
+		$status_type = current_action();	
+	} else {
+		$status_type = current_filter();
+	}
+	
 	if ( $status_type !== 'auth_cookie_valid' ) {
 		$wp_json_auth_cookie = substr( $status_type, 12 );
 		return;
